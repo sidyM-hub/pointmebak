@@ -1,0 +1,160 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scanner</title>
+    <style>
+        #video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+        #video {
+            width: auto;
+            height: 50%;
+        }
+        #canvas {
+            display: none;
+        }
+        .valide {
+            color: green;
+        }
+        .invalide {
+            color: red;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    
+    
+    <script src="{% static 'js/jsqr.js' %}"></script>
+    <script src="{% static 'css/qr.css' %}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+</head>
+<body>
+    
+    <div id="video-container">
+        <video id="video" width="0" height="480" autoplay playsinline></video>
+        <canvas id="canvas" width="240" height="240"></canvas>
+    </div>
+    <div id="result" class=""></div>
+    <p id="message"></p>
+
+    <script>
+        $(document).ready(function() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    let video = document.getElementById('video');
+                    video.srcObject = stream;
+                    video.play();
+                    video.onloadedmetadata = function() {
+                        scanQRCode();
+                    };
+                })
+                .catch(function(error) {
+                    console.log("Erreur d'accès à la webcam : " + error);
+                });
+    
+            function scanQRCode() {
+                let video = document.getElementById('video');
+                let canvas = document.getElementById('canvas');
+                let context = canvas.getContext('2d');
+                let resultContainer = document.getElementById('result');
+                let messageContainer = document.getElementById('message');
+    
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                let codeData = jsQR(imageData.data, imageData.width, imageData.height);
+    
+                if (codeData) {
+                    resultContainer.innerHTML = "QR Code détecté : " + codeData.data;
+    
+                    $.ajax({
+                        url: '/verifier_qr_code/',
+                        type: 'POST',
+                        data: {
+                            'qr_code': codeData.data
+                        },
+                        success: function(response) {
+                            if (response.valide) {
+                                resultContainer.className = "valide";
+                                resultContainer.innerHTML = "QR code valide<br>";
+                        
+                                // Créer la structure du tableau
+                                var table = document.createElement('table');
+                                var headerRow = document.createElement('tr');
+                                var phoneHeader = document.createElement('th');
+                                var dateHeader = document.createElement('th');
+                                var timeHeader = document.createElement('th');
+                                phoneHeader.textContent = "Numéro de téléphone";
+                                dateHeader.textContent = "Date du pointage";
+                                timeHeader.textContent = "Heure du pointage";
+                                headerRow.appendChild(phoneHeader);
+                                headerRow.appendChild(dateHeader);
+                                headerRow.appendChild(timeHeader);
+                                table.appendChild(headerRow);
+                        
+                                // Parcourir la liste des pointages
+                                for (var i = 0; i < response.pointages.length; i++) {
+                                    var pointage = response.pointages[i];
+                        
+                                    // Créer une ligne pour chaque pointage
+                                    var row = document.createElement('tr');
+                        
+                                    // Ajouter le numéro de téléphone
+                                    var phoneCell = document.createElement('td');
+                                    phoneCell.textContent = pointage.etudiant__telephone;
+                                    row.appendChild(phoneCell);
+                                    
+                                    // Ajouter la date du pointage
+                                    var dateCell = document.createElement('td');
+                                    dateCell.textContent = pointage.date_pointage;
+                                    row.appendChild(dateCell);
+                                    
+                                    // Ajouter l'heure du pointage
+                                    var timeCell = document.createElement('td');
+                                    timeCell.textContent = pointage.heure_pointage;
+                                    row.appendChild(timeCell);
+                                    
+                                    // Ajouter la ligne au tableau
+                                    table.appendChild(row);
+                                }
+                        
+                                // Ajouter le tableau au conteneur de résultats
+                                resultContainer.appendChild(table);
+    
+                                // Rediriger vers la page de la liste des pointages
+                                setTimeout(function() {
+                                    window.location.href = '/liste/';
+                                }, 5000);
+                            } else {
+                                resultContainer.className = "invalide";
+                                resultContainer.innerHTML = "QR code non valide";
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.log("Erreur lors de la vérification du QR code : " + error);
+                        }
+                    });
+                }
+            }
+    
+            // Exécuter la fonction de scan toutes les 2 secondes
+            setInterval(scanQRCode, 2000);
+        });
+    </script>
+</body>
+</html>

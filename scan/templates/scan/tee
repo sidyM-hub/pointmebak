@@ -1,0 +1,90 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>QR Code Scanner</title>
+    <style>
+        #video {
+            display: block;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+    </style>
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css'%}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+</head>
+<body>
+    <div id="video">
+        <h1></h1>
+        <canvas id="qr-canvas" width="340" height="280"></canvas>
+    </div>
+    
+
+    <script>
+        const canvas = document.getElementById('qr-canvas');
+const ctx = canvas.getContext('2d');
+
+// Vérifier si le navigateur prend en charge la capture vidéo de la webcam
+if (navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            const video = document.createElement('video');
+            video.srcObject = stream;
+
+            video.addEventListener('loadedmetadata', function() {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                const scanFrame = function() {
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                    if (code) {
+                        // QR code détecté, faire quelque chose avec les données du QR code
+                        console.log('QR Code:', code.data);
+                    }
+
+                    requestAnimationFrame(scanFrame);
+                };
+
+                video.play();
+                requestAnimationFrame(scanFrame);
+            });
+        })
+        .catch(function(error) {
+            console.error('Erreur lors de l\'accès à la webcam :', error);
+        });
+} else {
+    console.error('La capture vidéo de la webcam n\'est pas prise en charge.');
+}
+
+    </script>
+    <script src="{% static 'vendor/jquery/jquery.min.js '%}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js '%}"></script>
+
+   
+
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js '%}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/sb-admin-2.min.js '%}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{% static 'vendor/chart.js/Chart.min.js '%}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{% static 'js/demo/chart-area-demo.js '%}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js '%}"></script>
+</body>
+</html>
