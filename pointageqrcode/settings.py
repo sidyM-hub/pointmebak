@@ -11,9 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from decouple import config
-# import django_heroku
-# import dj_database_url
+#from decouple import config
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -55,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'pointageqrcode.urls'
@@ -94,9 +93,7 @@ DATABASES = {
 }
 
 
-# DATABASES = {
-#     'default': dj_database_url.config()
-# }
+
 
 
 #rootsmascan pwd
@@ -139,7 +136,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# django_heroku.settings(locals())
+
 
 STATICFILES_DIR = [
     os.path.join(BASE_DIR, 'static')
@@ -153,15 +150,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
 
-# settings.py
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-# EMAIL_HOST = config('EMAIL_HOST')
-# EMAIL_PORT = config('EMAIL_PORT')
-# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-# EMAIL_USE_TLS = config("EMAIL_USE_TLS")
 
 
 # DEFAULT_FROM_EMAIL = 'DEFAULT_FROM_EMAIL'
