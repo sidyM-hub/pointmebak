@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from decouple import config
+import django_heroku
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +29,7 @@ SECRET_KEY = 'xj+$ssemsbzsr&_qth%m_)n8hl@=bx4jot4#07_iazm8wwl^d2'
 # SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -53,10 +55,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'pointageqrcode.urls'
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -89,6 +92,13 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+
+DATABASES = {
+    'default': dj_database_url.config()
+}
+
+
 #rootsmascan pwd
 
 # Password validation
@@ -129,7 +139,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
+django_heroku.settings(locals())
 
 STATICFILES_DIR = [
     os.path.join(BASE_DIR, 'static')
@@ -137,6 +147,7 @@ STATICFILES_DIR = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = 'C:/Users/sma/Projetpointage/pointageqrcode/scan/media'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # MEDIA_URL = '/media/'
 
 

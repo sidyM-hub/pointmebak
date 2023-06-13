@@ -1,0 +1,1 @@
+web: gunicorn pointageqrcode.wsgi --log-file -
