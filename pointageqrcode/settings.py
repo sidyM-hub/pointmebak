@@ -24,7 +24,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 TEMPLATE_DIR =os.path.join(BASE_DIR, 'templates')
 
-# env = environ.Env()
+env = environ.Env()
+environ.Env.read_env()
 # env.read_env()
 
 
@@ -105,7 +106,7 @@ WSGI_APPLICATION = 'pointageqrcode.wsgi.application'
 
 
 DATABASES ={
-    "default":dj_database_url.parse(os.environ.get("DATABASES_URL"))
+    "default":dj_database_url.parse(env('DATABASES_URL'))
 }
 
 
