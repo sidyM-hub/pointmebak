@@ -106,7 +106,10 @@ WSGI_APPLICATION = 'pointageqrcode.wsgi.application'
 
 
 DATABASES ={
-    "default":dj_database_url.parse(env('DATABASES_URL'))
+    "default":dj_database_url.parse(env('DATABASES_URL')),
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
 }
 
 
