@@ -9,8 +9,13 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
+from pathlib import Path
 import os
+import environ
+from django.core.exceptions import ImproperlyConfigured
+# from environ import Env
+
+import dj_database_url
 #from decouple import config
 
 
@@ -18,6 +23,12 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 TEMPLATE_DIR =os.path.join(BASE_DIR, 'templates')
+
+# env = environ.Env()
+# env.read_env()
+
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -81,19 +92,21 @@ WSGI_APPLICATION = 'pointageqrcode.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bakdb',
-        'USER': 'postgres',
-        'PASSWORD': 'rootsmascan',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'bakdb',
+#         'USER': 'postgres',
+#         'PASSWORD': 'rootsmascan',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+
+DATABASES ={
+    "default":dj_database_url.parse(os.environ.get("DATABASES_URL"))
 }
-
-
-
 
 
 #rootsmascan pwd
