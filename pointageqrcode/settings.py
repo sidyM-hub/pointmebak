@@ -15,8 +15,9 @@ import environ
 from django.core.exceptions import ImproperlyConfigured
 # from environ import Env
 
+from decouple import config
 import dj_database_url
-#from decouple import config
+
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -24,9 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 TEMPLATE_DIR =os.path.join(BASE_DIR, 'templates')
 
-env = environ.Env()
-environ.Env.read_env()
-env.read_env()
+# env = environ.Env()
+# environ.Env.read_env()
+# env.read_env()
 
 
 
@@ -35,7 +36,7 @@ env.read_env()
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'xj+$ssemsbzsr&_qth%m_)n8hl@=bx4jot4#07_iazm8wwl^d2'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECRET_KEY = config('SECRET_KEY')
 
@@ -69,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
+    
 ]
 
 ROOT_URLCONF = 'pointageqrcode.urls'
@@ -88,8 +90,7 @@ TEMPLATES = [
         },
     },
 ]
-#pour vercel
-# SECRET_KEY = 'mysecretkey'
+
 
 WSGI_APPLICATION = 'pointageqrcode.wsgi.application'
 
@@ -110,10 +111,8 @@ WSGI_APPLICATION = 'pointageqrcode.wsgi.application'
 
 
 DATABASES ={
-    "default":dj_database_url.parse(env('DATABASES_URL')),
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
+    "default":dj_database_url.parse(config('DATABASES_URL')),
+
 }
 
 
@@ -156,6 +155,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+
+
+# core/settings.py
+
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 
 
