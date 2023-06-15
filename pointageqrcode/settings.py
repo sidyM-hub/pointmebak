@@ -24,9 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 TEMPLATE_DIR =os.path.join(BASE_DIR, 'templates')
 
-# env = environ.Env()
-# environ.Env.read_env()
-# env.read_env()
+env = environ.Env()
+environ.Env.read_env()
+env.read_env()
 
 
 
@@ -42,7 +42,9 @@ SECRET_KEY = 'xj+$ssemsbzsr&_qth%m_)n8hl@=bx4jot4#07_iazm8wwl^d2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+# ALLOWED_HOSTS = ['.vercel.app']
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -86,8 +88,8 @@ TEMPLATES = [
         },
     },
 ]
-
-SECRET_KEY = 'mysecretkey'
+#pour vercel
+# SECRET_KEY = 'mysecretkey'
 
 WSGI_APPLICATION = 'pointageqrcode.wsgi.application'
 
@@ -95,24 +97,24 @@ WSGI_APPLICATION = 'pointageqrcode.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bakdb',
-        'USER': 'postgres',
-        'PASSWORD': 'rootsmascan',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-
-
-# DATABASES ={
-#     "default":dj_database_url.parse(env('DATABASES_URL')),
-#     "staticfiles": {
-#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-#     },
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'bakdb',
+#         'USER': 'postgres',
+#         'PASSWORD': 'rootsmascan',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
 # }
+
+
+DATABASES ={
+    "default":dj_database_url.parse(env('DATABASES_URL')),
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 
 #rootsmascan pwd
