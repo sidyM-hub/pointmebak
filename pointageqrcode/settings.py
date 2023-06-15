@@ -87,6 +87,8 @@ TEMPLATES = [
     },
 ]
 
+SECRET_KEY = 'mysecretkey'
+
 WSGI_APPLICATION = 'pointageqrcode.wsgi.application'
 
 
