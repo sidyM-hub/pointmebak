@@ -14,9 +14,11 @@ import os
 import environ
 from django.core.exceptions import ImproperlyConfigured
 # from environ import Env
+# from decouple import config
 
-from decouple import config
 import dj_database_url
+
+
 
 
 
@@ -25,9 +27,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 TEMPLATE_DIR =os.path.join(BASE_DIR, 'templates')
 
-# env = environ.Env()
-# environ.Env.read_env()
-# env.read_env()
+env = environ.Env()
+environ.Env.read_env()
+env.read_env()
 
 
 
@@ -36,9 +38,9 @@ TEMPLATE_DIR =os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
-
 # SECRET_KEY = config('SECRET_KEY')
+
+SECRET_KEY = 'xj+$ssemsbzsr&_qth%m_)n8hl@=bx4jot4#07_iazm8wwl^d2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -52,6 +54,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    # 'whitenoise.runserver_nostatic',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -63,6 +66,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -111,8 +115,7 @@ WSGI_APPLICATION = 'pointageqrcode.wsgi.application'
 
 
 DATABASES ={
-    "default":dj_database_url.parse(config('DATABASES_URL')),
-
+    'default': dj_database_url.parse(os.environ.get('DATABASES_URL'))
 }
 
 
